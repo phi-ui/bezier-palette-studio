@@ -41,10 +41,10 @@ export type InputsAction = {
   updateSwatchName: (hue: InputsState['swatchName']) => void;
   updateCurveType: (hue: InputsState['curveType']) => void;
   updateCurveSubType: (hue: InputsState['curveSubType']) => void;
-  updateCurveStyle: (freeHandMode: InputsState['curveStyle']) => void;
+  updateCurveStyle: (curveStyle: InputsState['curveStyle']) => void;
   updateHexColor: (hexColor: InputsState['hexColor']) => void;
   updateAutoGenerateSwatchName: (
-    freeHandMode: InputsState['autoGenerateSwatchName'],
+    autoGenerateSwatchName: InputsState['autoGenerateSwatchName'],
   ) => void;
 };
 
