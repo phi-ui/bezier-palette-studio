@@ -32,7 +32,9 @@ export const createInputsSlice = (
 
   updateSwatchName: (swatchName) => set({ swatchName }),
 
-  updateFreeHandMode: (freeHandMode) => set({ freeHandMode }),
+  updateCurveStyle: (curveStyle) => set({ curveStyle }),
+
+  updateHexColor: (hexColor) => set({ hexColor }),
 
   updateAutoGenerateSwatchName: (autoGenerateSwatchName) =>
     set({ autoGenerateSwatchName }),

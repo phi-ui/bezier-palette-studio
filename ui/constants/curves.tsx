@@ -1,3 +1,5 @@
+import CurveIcon from '@components/Icons/Curve';
+
 const linear = [0.5, 0.5, 0.5, 0.5];
 
 const easeInCubic = [0.55, 0.055, 0.675, 0.19];
@@ -31,6 +33,24 @@ const easeInOutQuint = [0.86, 0, 0.07, 1];
 // const easeInBack = [0.6, -0.28, 0.735, 0.045];
 // const easeOutBack = [0.175, 0.885, 0.32, 1.275];
 // const easeInOutBack = [0.68, -0.55, 0.265, 1.55];
+
+export const curveStyles = {
+  cubicBezier: {
+    id: 'cubicBezier',
+    label: 'Cubic Bezier',
+    icon: <CurveIcon stroke="currentColor" />,
+  },
+  polyBezier: {
+    id: 'polyBezier',
+    label: 'Poly Bezier',
+    icon: <CurveIcon stroke="currentColor" />,
+  },
+  presets: {
+    id: 'presets',
+    label: 'Presets',
+    icon: <CurveIcon stroke="currentColor" />,
+  },
+};
 
 export const curvesTypes = {
   linear: {

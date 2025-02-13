@@ -15,7 +15,7 @@ import { getRelativePositionForHandles } from './utils';
 
 function CurveType() {
   const {
-    freeHandMode,
+    curveStyle,
     curveType,
     updateCurveType,
     curveSubType,
@@ -27,7 +27,7 @@ function CurveType() {
   } = useColorPicker(
     useShallow((state) => {
       const {
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         curveType: curveTypeState,
         updateCurveType: updateCurveTypeState,
         curveSubType: curveSubTypeState,
@@ -38,7 +38,7 @@ function CurveType() {
         updateEndPointHandle: updateEndPointHandleState,
       } = state;
       return {
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         curveType: curveTypeState,
         updateCurveType: updateCurveTypeState,
         curveSubType: curveSubTypeState,
@@ -55,7 +55,7 @@ function CurveType() {
 
   useEffect(() => {
     if (
-      !freeHandMode &&
+      curveStyle === 'presets' &&
       curveType &&
       ((curvesTypes[curveType].subTypes && curveSubType) ||
         !curvesTypes[curveType].subTypes)
@@ -84,7 +84,7 @@ function CurveType() {
     startPoint,
     endPoint,
     updateEndPointHandle,
-    freeHandMode,
+    curveStyle,
   ]);
 
   useEffect(() => {
@@ -97,11 +97,11 @@ function CurveType() {
     <>
       <div className="w-40 flex flex-col gap-2">
         <SelectGroup>
-          <SelectLabel className="px-0">Curve</SelectLabel>
+          <SelectLabel className="px-0">Curve Type</SelectLabel>
           <Select
             onValueChange={updateCurveType}
             value={curveType}
-            disabled={freeHandMode}
+            disabled={curveStyle !== 'presets'}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Curve" />
@@ -123,7 +123,7 @@ function CurveType() {
             onValueChange={updateCurveSubType}
             value={curveSubType}
             disabled={
-              freeHandMode ||
+              curveStyle !== 'presets' ||
               !curveType ||
               !!(curveType && !curvesTypes[curveType].subTypes)
             }

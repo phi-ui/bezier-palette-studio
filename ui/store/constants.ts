@@ -7,7 +7,7 @@ export const INPUT_DEFAULT_VALUES: InputsState = {
   swatchName: '',
   autoGenerateSwatchName: true,
   stepCount: 9,
-  freeHandMode: true,
+  curveStyle: 'cubicBezier',
 };
 
 export const COORDINATES_DEFAULT_VALUES: CoordinatesState = {

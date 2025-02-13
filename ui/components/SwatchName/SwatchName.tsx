@@ -117,7 +117,7 @@ function SwatchName() {
   ]);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col items-center">
       <div className="flex flex-col">
         <Label className="py-1.5" htmlFor="swatch-name">
           Name
@@ -131,7 +131,7 @@ function SwatchName() {
           disabled={autoGenerateSwatchName}
         />
       </div>
-      <div className="flex items-center gap-2 mt-6">
+      <div className="flex items-center gap-2 mt-2 -ml-4">
         <Checkbox
           id="auto-generate-checkbox"
           onClick={handleAutoGenerateSwatchName}

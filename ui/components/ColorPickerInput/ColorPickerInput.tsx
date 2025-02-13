@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import ColorPicker from '@components/ColorPicker';
 import StepCount from '@components/StepCount';
 import CurveTypeSelect from '@components/CurveType';
-import FreeHandMode from '@components/FreeHandMode';
+import CurveStyle from '@components/CurveStyle';
 import DarkModeToggle from '@components/DarkModeToggle';
 import GenerateSwatchButton from '@components/GenerateSwatchButton';
 import SwatchName from '@components/SwatchName';
@@ -22,7 +22,7 @@ function ColorPickerInput() {
       </div>
       <ColorPicker />
       <div className="flex gap-4 mb-4 items-end">
-        <FreeHandMode />
+        <CurveStyle />
         <CurveTypeSelect />
       </div>
       <div className="flex justify-between">

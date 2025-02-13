@@ -7,7 +7,8 @@ export type InputsState = {
   hue: HueValue;
   curveType: CurveType | '';
   curveSubType: CurveSubType | '';
-  freeHandMode: boolean;
+  curveStyle: 'cubicBezier' | 'polyBezier' | 'presets';
+  hexColor: string;
   swatchName: string;
   autoGenerateSwatchName: boolean;
 };
@@ -40,7 +41,8 @@ export type InputsAction = {
   updateSwatchName: (hue: InputsState['swatchName']) => void;
   updateCurveType: (hue: InputsState['curveType']) => void;
   updateCurveSubType: (hue: InputsState['curveSubType']) => void;
-  updateFreeHandMode: (freeHandMode: InputsState['freeHandMode']) => void;
+  updateCurveStyle: (freeHandMode: InputsState['curveStyle']) => void;
+  updateHexColor: (hexColor: InputsState['hexColor']) => void;
   updateAutoGenerateSwatchName: (
     freeHandMode: InputsState['autoGenerateSwatchName'],
   ) => void;
