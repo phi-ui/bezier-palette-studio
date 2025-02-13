@@ -23,7 +23,7 @@ function StepCount() {
   };
 
   return (
-    <div className="w-20 flex flex-col">
+    <div className="w-14 flex flex-col">
       <Label className="py-1.5" htmlFor="step-count">
         Steps
       </Label>
