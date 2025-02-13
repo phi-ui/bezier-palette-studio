@@ -1,4 +1,5 @@
 import CurveIcon from '@components/Icons/Curve';
+import Curve2Icon from '@components/Icons/Curve2';
 
 const linear = [0.5, 0.5, 0.5, 0.5];
 
@@ -43,7 +44,7 @@ export const curveStyles = {
   polyBezier: {
     id: 'polyBezier',
     label: 'Poly Bezier',
-    icon: <CurveIcon stroke="currentColor" />,
+    icon: <Curve2Icon stroke="currentColor" />,
   },
   presets: {
     id: 'presets',
