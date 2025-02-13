@@ -14,7 +14,7 @@ import styles from './bezierCurveGraph.module.css';
 function BezierCurveGraph() {
   const {
     hue,
-    freeHandMode,
+    curveStyle,
     startPoint,
     updateStartPoint,
     endPoint,
@@ -27,7 +27,7 @@ function BezierCurveGraph() {
     useShallow((state) => {
       const {
         hue: hueState,
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         startPoint: startPointState,
         updateStartPoint: updateStartPointState,
         endPoint: endPointState,
@@ -40,7 +40,7 @@ function BezierCurveGraph() {
 
       return {
         hue: hueState,
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         startPoint: startPointState,
         updateStartPoint: updateStartPointState,
         endPoint: endPointState,
@@ -137,7 +137,7 @@ function BezierCurveGraph() {
       <Point
         x={startPointHandle.x}
         y={startPointHandle.y}
-        disabled={!freeHandMode}
+        disabled={curveStyle === 'presets'}
         type="startPointHandle"
         parentCoords={elementPosition}
         handlePointCoords={handlePointCoords}
@@ -147,7 +147,7 @@ function BezierCurveGraph() {
       <Point
         x={endPointHandle.x}
         y={endPointHandle.y}
-        disabled={!freeHandMode}
+        disabled={curveStyle === 'presets'}
         type="endPointHandle"
         parentCoords={elementPosition}
         handlePointCoords={handlePointCoords}
