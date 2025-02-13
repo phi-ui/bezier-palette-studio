@@ -33,8 +33,7 @@ function HexColor() {
       </Label>
       <Input
         id="hex-color"
-        min={2}
-        max={20}
+        maxLength={6}
         value={isPolyBezierCurve ? hexColor : '-'}
         disabled={!isPolyBezierCurve}
         onChange={handleStepCount}
