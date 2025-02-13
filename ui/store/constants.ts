@@ -8,6 +8,7 @@ export const INPUT_DEFAULT_VALUES: InputsState = {
   autoGenerateSwatchName: true,
   stepCount: 9,
   curveStyle: 'cubicBezier',
+  hexColor: '-',
 };
 
 export const COORDINATES_DEFAULT_VALUES: CoordinatesState = {
