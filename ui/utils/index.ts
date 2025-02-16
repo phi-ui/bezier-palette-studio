@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 import convertColor from 'color-convert';
 import type { HueValue, SwatchData } from '@appTypes/color';
 import type { Point } from '@appTypes/coords';
-import type { Swatch, Swatches } from '@store/types';
+import type { CurveStyle, Swatch, Swatches } from '@store/types';
 import { COLOR_RANGES } from '@constants/colors';
 import {
   FIXED_CURVE,
@@ -49,13 +49,17 @@ export function getColorForCoordinates(
   return [hue, saturation, value];
 }
 
-export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
+export const getColorsFromCoordinates = (
+  swatch: Swatch,
+  curveStyle: CurveStyle,
+): string[] => {
   const {
     hue,
     startPoint,
     endPoint,
     startPointHandle,
     endPointHandle,
+    midPoint,
     stepCount,
   } = swatch;
 
@@ -63,10 +67,23 @@ export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
   const { x: x2, y: y2 } = endPoint;
   const { x: cx1, y: cy1 } = startPointHandle;
   const { x: cx2, y: cy2 } = endPointHandle;
+  let colorsCords: Point[] = [];
 
-  const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
-  const colorsCords = curve.getLUT(stepCount - 1);
-
+  if (curveStyle === 'polyBezier' && midPoint) {
+    const { x: mx, y: my } = midPoint;
+    const dividedSteps = Math.ceil(stepCount / 2);
+    const curve1 = new Bezier(x1, y1, cx1, cy1, mx, my);
+    const curve2 = new Bezier(mx, my, cx2, cy2, x2, y2);
+    const colorsCords1 = curve1.getLUT(
+      stepCount % 2 === 0 ? dividedSteps : dividedSteps - 1,
+    );
+    const colorsCords2 = curve2.getLUT(dividedSteps - 1);
+    colorsCords2.shift();
+    colorsCords = [...colorsCords1, ...colorsCords2];
+  } else {
+    const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+    colorsCords = curve.getLUT(stepCount - 1);
+  }
   return colorsCords.map((colorCord) => {
     const { x, y } = colorCord;
     return getColorForCoordinates(
@@ -78,11 +95,14 @@ export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
   });
 };
 
-export const getSwatchData = (swatches: Swatches): SwatchData[] =>
+export const getSwatchData = (
+  swatches: Swatches,
+  curveStyle: CurveStyle,
+): SwatchData[] =>
   swatches.map((swatch) => {
     const { name, id } = swatch;
     const swatchName = camelCase(name);
-    const colors = getColorsFromCoordinates(swatch);
+    const colors = getColorsFromCoordinates(swatch, curveStyle);
     return {
       id,
       name,
@@ -110,14 +130,14 @@ export const getSwatchData = (swatches: Swatches): SwatchData[] =>
     };
   });
 
-export const getTokensData = (swatches: Swatches) => {
+export const getTokensData = (swatches: Swatches, curveStyle: CurveStyle) => {
   const swatchData: Record<string, Record<string, string>> = {};
 
   for (const swatch of swatches) {
     const { name } = swatch;
     const swatchName = camelCase(name);
 
-    const colors = getColorsFromCoordinates(swatch);
+    const colors = getColorsFromCoordinates(swatch, curveStyle);
     swatchData[swatchName] = colors.reduce(
       (acc, color, index) => {
         acc[(index + 1) * 100] = color;
