@@ -2,12 +2,14 @@ import type { Point } from '@appTypes/coords';
 import type { HueValue } from '@appTypes/color';
 import type { CurveType, CurveSubType } from '@appTypes/curves';
 
+export type CurveStyle = 'cubicBezier' | 'polyBezier' | 'presets';
+
 export type InputsState = {
   stepCount: number;
   hue: HueValue;
   curveType: CurveType | '';
   curveSubType: CurveSubType | '';
-  curveStyle: 'cubicBezier' | 'polyBezier' | 'presets';
+  curveStyle: CurveStyle;
   hexColor: string;
   swatchName: string;
   autoGenerateSwatchName: boolean;
