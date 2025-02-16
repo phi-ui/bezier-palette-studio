@@ -26,6 +26,7 @@ function Swatch({
   duplicateSwatch,
   swatch,
   isEditing,
+  curveStyle,
 }: SwatchProps) {
   const { id } = swatch;
 
@@ -34,7 +35,7 @@ function Swatch({
     isEditing ? 'border-primary-border' : '',
   );
 
-  const colors = getColorsFromCoordinates(swatch);
+  const colors = getColorsFromCoordinates(swatch, curveStyle);
 
   const editColorSwatch: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();

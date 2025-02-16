@@ -1,6 +1,7 @@
-import { Swatches } from '@store/types';
+import { CurveStyle, Swatches } from '@store/types';
 
 export type TokensInfoModalProps = {
   atLeastOneSwatchCreated: boolean;
   swatches: Swatches;
+  curveStyle: CurveStyle;
 };
