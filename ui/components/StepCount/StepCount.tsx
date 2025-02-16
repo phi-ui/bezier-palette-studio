@@ -30,7 +30,7 @@ function StepCount() {
       <Input
         id="step-count"
         type="number"
-        min={2}
+        min={3}
         max={20}
         value={stepCount}
         onChange={handleStepCount}
