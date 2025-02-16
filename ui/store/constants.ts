@@ -11,7 +11,7 @@ export const INPUT_DEFAULT_VALUES: InputsState = {
   hexColor: '-',
 };
 
-export const COORDINATES_DEFAULT_VALUES: CoordinatesState = {
+export const CUBIC_DEFAULT_VALUES: CoordinatesState = {
   startPoint: {
     x: 90,
     y: 80,
@@ -29,3 +29,28 @@ export const COORDINATES_DEFAULT_VALUES: CoordinatesState = {
     y: 65,
   },
 };
+
+export const POLY_BEZIER_DEFAULT_VALUES: CoordinatesState = {
+  startPoint: {
+    x: 90,
+    y: 80,
+  },
+  endPoint: {
+    x: 362.5,
+    y: 341,
+  },
+  startPointHandle: {
+    x: 293.5,
+    y: 70,
+  },
+  endPointHandle: {
+    x: 377.5,
+    y: 135,
+  },
+  midPoint: {
+    x: 338.5,
+    y: 107,
+  },
+};
+
+export const DEFAULT_HEX_COLOR = '#E41C1C';
