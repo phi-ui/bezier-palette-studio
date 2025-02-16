@@ -3,8 +3,9 @@ import { useShallow } from 'zustand/react/shallow';
 import type { Point as PointType } from '@appTypes/coords';
 import { COLOR_PICKER_CONTAINER_SIZE } from '@constants/colors';
 import useColorPicker from '@store/colorPicker';
-import styles from './bezierCurveGraph.module.css';
 import CubicCurve from './components/CubicCurve';
+import QuadraticCurve from './components/QuadraticCurve';
+import styles from './bezierCurveGraph.module.css';
 
 function BezierCurveGraph() {
   const { curveStyle } = useColorPicker(
@@ -52,7 +53,12 @@ function BezierCurveGraph() {
       width={COLOR_PICKER_CONTAINER_SIZE}
       height={COLOR_PICKER_CONTAINER_SIZE}
     >
-      {curveStyle === 'polyBezier' ? null : (
+      {curveStyle === 'polyBezier' ? (
+        <QuadraticCurve
+          elementPosition={elementPosition}
+          elementDimensions={elementDimensions}
+        />
+      ) : (
         <CubicCurve
           elementPosition={elementPosition}
           elementDimensions={elementDimensions}
