@@ -20,6 +20,7 @@ export type CoordinatesState = {
   endPoint: Point;
   startPointHandle: Point;
   endPointHandle: Point;
+  midPoint?: Point;
 };
 
 type Preset = Pick<InputsState, 'stepCount' | 'hue'> &
@@ -53,6 +54,7 @@ export type InputsAction = {
 export type CoordinatesAction = {
   updateStartPoint: (startPoint: CoordinatesState['startPoint']) => void;
   updateEndPoint: (endPoint: CoordinatesState['endPoint']) => void;
+  updateMidPoint: (midPoint: CoordinatesState['midPoint']) => void;
   updateStartPointHandle: (
     startPointHandle: CoordinatesState['startPointHandle'],
   ) => void;
