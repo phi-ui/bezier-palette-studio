@@ -51,18 +51,26 @@ export const createInputsSlice = (
     set({ curveStyle, hexColor: DEFAULT_HEX_COLOR, ...coords });
   },
 
-  updateHexColor: (hexColor) => {
+  updateHexColor: (hexColor, isColorValid) => {
     const colorPickerPadding =
       (COLOR_PICKER_CONTAINER_SIZE - COLOR_PICKER_SIZE) / 2;
     const [hue, saturation, value] = convertColor.hex.hsv(hexColor);
     const x = (saturation * COLOR_PICKER_SIZE) / 100;
     const y = ((100 - value) * COLOR_PICKER_SIZE) / 100;
 
-    set({
-      hexColor,
-      hue: hue as HueValue,
-      midPoint: { x: x + colorPickerPadding, y: y + colorPickerPadding },
-    });
+    if (isColorValid) {
+      // set midpoint coordinate and hue if user explicitly sets hex value
+      set({
+        hexColor,
+        hue: hue as HueValue,
+        midPoint: { x: x + colorPickerPadding, y: y + colorPickerPadding },
+      });
+    } else {
+      // if not valid or the hex value being set programmatically directly update the value
+      set({
+        hexColor,
+      });
+    }
   },
 
   updateAutoGenerateSwatchName: (autoGenerateSwatchName) =>

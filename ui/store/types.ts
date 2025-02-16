@@ -45,7 +45,10 @@ export type InputsAction = {
   updateCurveType: (hue: InputsState['curveType']) => void;
   updateCurveSubType: (hue: InputsState['curveSubType']) => void;
   updateCurveStyle: (curveStyle: InputsState['curveStyle']) => void;
-  updateHexColor: (hexColor: InputsState['hexColor']) => void;
+  updateHexColor: (
+    hexColor: InputsState['hexColor'],
+    isColorValid?: boolean,
+  ) => void;
   updateAutoGenerateSwatchName: (
     autoGenerateSwatchName: InputsState['autoGenerateSwatchName'],
   ) => void;

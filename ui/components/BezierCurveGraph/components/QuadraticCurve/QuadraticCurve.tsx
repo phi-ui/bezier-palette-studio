@@ -88,7 +88,7 @@ function QuadraticCurve({
   const handlePointCoords = (coords: PointType, type: EditableCoordsType) => {
     updateCoords[type](coords);
     if (type === 'midPoint') {
-      // update hex color on mid point change along with this update control point relative position
+      // update hex color on mid point change
       const newColor = getColorForCoordinates(
         hue,
         { ...coords },
