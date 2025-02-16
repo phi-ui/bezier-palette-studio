@@ -20,23 +20,23 @@ function HexColor() {
     }),
   );
 
-  const handleStepCount: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleHexColor: ChangeEventHandler<HTMLInputElement> = (event) => {
     updateHexColor(event.currentTarget.value);
   };
 
   const isPolyBezierCurve = curveStyle === 'polyBezier';
 
   return (
-    <div className="w-20 flex flex-col">
-      <Label className="py-1.5" htmlFor="step-count">
+    <div className="w-24 flex flex-col">
+      <Label className="py-1.5" htmlFor="hex-color">
         Hex Color
       </Label>
       <Input
         id="hex-color"
-        maxLength={6}
+        maxLength={7}
         value={isPolyBezierCurve ? hexColor : '-'}
         disabled={!isPolyBezierCurve}
-        onChange={handleStepCount}
+        onChange={handleHexColor}
       />
     </div>
   );
