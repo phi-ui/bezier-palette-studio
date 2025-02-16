@@ -36,7 +36,8 @@ function ColorPickerInput() {
       <ColorPicker />
       <div className="flex gap-4 mb-4 items-end">
         <StepCount />
-        {curveStyle === 'presets' ? <CurveTypeSelect /> : <HexColor />}
+        {curveStyle === 'presets' ? <CurveTypeSelect /> : null}
+        {curveStyle === 'polyBezier' ? <HexColor /> : null}
       </div>
       <div className="flex justify-between">
         <div className="flex gap-2">
