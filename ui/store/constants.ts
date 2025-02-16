@@ -11,7 +11,7 @@ export const INPUT_DEFAULT_VALUES: InputsState = {
   hexColor: '-',
 };
 
-export const CUBIC_DEFAULT_VALUES: CoordinatesState = {
+export const CUBIC_BEZIER_DEFAULT_VALUES: CoordinatesState = {
   startPoint: {
     x: 90,
     y: 80,

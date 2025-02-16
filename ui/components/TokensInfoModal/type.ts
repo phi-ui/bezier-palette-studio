@@ -4,4 +4,5 @@ export type TokensInfoModalProps = {
   atLeastOneSwatchCreated: boolean;
   swatches: Swatches;
   curveStyle: CurveStyle;
+  hexColor: string;
 };

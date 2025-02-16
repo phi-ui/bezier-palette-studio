@@ -1,5 +1,11 @@
 import { doesNameExistInArray, getNameFromHue, uuid } from '@utils';
 import cloneDeep from 'lodash/cloneDeep';
+import convertColor from 'color-convert';
+import type { HueValue } from '@appTypes/color';
+import {
+  COLOR_PICKER_CONTAINER_SIZE,
+  COLOR_PICKER_SIZE,
+} from '@constants/colors';
 import type {
   CoordinatesAction,
   CoordinatesState,
@@ -14,7 +20,7 @@ import type {
   SwatchesState,
 } from './types';
 import {
-  CUBIC_DEFAULT_VALUES,
+  CUBIC_BEZIER_DEFAULT_VALUES,
   DEFAULT_HEX_COLOR,
   INPUT_DEFAULT_VALUES,
   POLY_BEZIER_DEFAULT_VALUES,
@@ -41,11 +47,23 @@ export const createInputsSlice = (
     const coords =
       curveStyle === 'polyBezier'
         ? POLY_BEZIER_DEFAULT_VALUES
-        : CUBIC_DEFAULT_VALUES;
+        : CUBIC_BEZIER_DEFAULT_VALUES;
     set({ curveStyle, hexColor: DEFAULT_HEX_COLOR, ...coords });
   },
 
-  updateHexColor: (hexColor) => set({ hexColor }),
+  updateHexColor: (hexColor) => {
+    const colorPickerPadding =
+      (COLOR_PICKER_CONTAINER_SIZE - COLOR_PICKER_SIZE) / 2;
+    const [hue, saturation, value] = convertColor.hex.hsv(hexColor);
+    const x = (saturation * COLOR_PICKER_SIZE) / 100;
+    const y = ((100 - value) * COLOR_PICKER_SIZE) / 100;
+
+    set({
+      hexColor,
+      hue: hue as HueValue,
+      midPoint: { x: x + colorPickerPadding, y: y + colorPickerPadding },
+    });
+  },
 
   updateAutoGenerateSwatchName: (autoGenerateSwatchName) =>
     set({ autoGenerateSwatchName }),
@@ -55,7 +73,7 @@ export const createCoordinatesSlice = (
   set: SetFunction,
 ): CoordinatesState & CoordinatesAction => ({
   // initial state values
-  ...CUBIC_DEFAULT_VALUES,
+  ...CUBIC_BEZIER_DEFAULT_VALUES,
 
   // state update action
   updateStartPoint: (startPoint) => set({ startPoint }),
@@ -137,7 +155,7 @@ export const createSwatchesSlice = (
     swatchesCopy.splice(index, 1);
 
     const { endPoint, endPointHandle, startPoint, startPointHandle } =
-      CUBIC_DEFAULT_VALUES;
+      CUBIC_BEZIER_DEFAULT_VALUES;
     const swatchName = getNameFromHue(
       hue,
       startPoint,

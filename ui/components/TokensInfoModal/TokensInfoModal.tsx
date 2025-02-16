@@ -22,8 +22,11 @@ function TokensInfoModal({
   atLeastOneSwatchCreated,
   swatches,
   curveStyle,
+  hexColor,
 }: TokensInfoModalProps) {
-  const swatchData = JSON.stringify(getTokensData(swatches, curveStyle));
+  const swatchData = JSON.stringify(
+    getTokensData(swatches, curveStyle, hexColor),
+  );
 
   return (
     <Dialog>

@@ -13,17 +13,25 @@ import ColorsIcon from '@components/Icons/Colors';
 import ExportIcon from '@components/Icons/Export';
 
 function Toolbar() {
-  const { swatches, curveStyle } = useColorPicker(
+  const { swatches, curveStyle, hexColor } = useColorPicker(
     useShallow((state) => {
-      const { swatches: swatchesState, curveStyle: curveStyleState } = state;
-      return { swatches: swatchesState, curveStyle: curveStyleState };
+      const {
+        swatches: swatchesState,
+        curveStyle: curveStyleState,
+        hexColor: hexColorState,
+      } = state;
+      return {
+        swatches: swatchesState,
+        curveStyle: curveStyleState,
+        hexColor: hexColorState,
+      };
     }),
   );
 
   const atLeastOneSwatchCreated = swatches.length > 0;
 
   const handleColorOperation = (operation: string) => {
-    const swatchData = getSwatchData(swatches, curveStyle);
+    const swatchData = getSwatchData(swatches, curveStyle, hexColor);
     parent.postMessage(
       {
         pluginMessage: {
@@ -42,6 +50,7 @@ function Toolbar() {
         atLeastOneSwatchCreated={atLeastOneSwatchCreated}
         swatches={swatches}
         curveStyle={curveStyle}
+        hexColor={hexColor}
       />
       <TooltipProvider delayDuration={1}>
         <Tooltip>
