@@ -13,7 +13,12 @@ import type {
   SwatchesAction,
   SwatchesState,
 } from './types';
-import { COORDINATES_DEFAULT_VALUES, INPUT_DEFAULT_VALUES } from './constants';
+import {
+  CUBIC_DEFAULT_VALUES,
+  DEFAULT_HEX_COLOR,
+  INPUT_DEFAULT_VALUES,
+  POLY_BEZIER_DEFAULT_VALUES,
+} from './constants';
 
 export const createInputsSlice = (
   set: SetFunction,
@@ -32,7 +37,13 @@ export const createInputsSlice = (
 
   updateSwatchName: (swatchName) => set({ swatchName }),
 
-  updateCurveStyle: (curveStyle) => set({ curveStyle }),
+  updateCurveStyle: (curveStyle) => {
+    const coords =
+      curveStyle === 'polyBezier'
+        ? POLY_BEZIER_DEFAULT_VALUES
+        : CUBIC_DEFAULT_VALUES;
+    set({ curveStyle, hexColor: DEFAULT_HEX_COLOR, ...coords });
+  },
 
   updateHexColor: (hexColor) => set({ hexColor }),
 
@@ -44,12 +55,14 @@ export const createCoordinatesSlice = (
   set: SetFunction,
 ): CoordinatesState & CoordinatesAction => ({
   // initial state values
-  ...COORDINATES_DEFAULT_VALUES,
+  ...CUBIC_DEFAULT_VALUES,
 
   // state update action
   updateStartPoint: (startPoint) => set({ startPoint }),
 
   updateEndPoint: (endPoint) => set({ endPoint }),
+
+  updateMidPoint: (midPoint) => set({ midPoint }),
 
   updateStartPointHandle: (startPointHandle) => set({ startPointHandle }),
 
@@ -68,6 +81,7 @@ export const createPresetsSlice = (
         hue: preset.hue,
         stepCount: preset.stepCount,
         startPoint: preset.startPoint,
+        midPoint: preset.midPoint,
         endPoint: preset.endPoint,
         startPointHandle: preset.startPoint,
         endPointHandle: preset.endPointHandle,
@@ -117,15 +131,15 @@ export const createSwatchesSlice = (
   },
 
   deleteSwatch: (id) => {
-    const { swatches } = get();
+    const { swatches, hue } = get();
     const swatchesCopy = cloneDeep(swatches);
     const index = swatchesCopy.findIndex((swatch) => swatch.id === id);
     swatchesCopy.splice(index, 1);
 
     const { endPoint, endPointHandle, startPoint, startPointHandle } =
-      COORDINATES_DEFAULT_VALUES;
+      CUBIC_DEFAULT_VALUES;
     const swatchName = getNameFromHue(
-      INPUT_DEFAULT_VALUES.hue,
+      hue,
       startPoint,
       endPoint,
       startPointHandle,
@@ -134,8 +148,6 @@ export const createSwatchesSlice = (
     const swatchNames = swatches.map((swatch) => swatch.name);
     const newName = doesNameExistInArray(swatchNames, swatchName);
     set({
-      ...COORDINATES_DEFAULT_VALUES,
-      ...INPUT_DEFAULT_VALUES,
       swatchName: newName,
       swatches: swatchesCopy,
       swatchEditingId: null,
