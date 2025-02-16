@@ -118,7 +118,7 @@ function CurveType() {
           </Select>
         </SelectGroup>
       </div>
-      <div className="w-54 flex flex-col gap-2">
+      <div className="w-54 flex flex-1 flex-col gap-2">
         <SelectGroup>
           <SelectLabel className="px-0 py-1.5 h-[1.5rem] inline-block">
             Curve Transition
