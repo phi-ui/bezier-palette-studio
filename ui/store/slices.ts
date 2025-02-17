@@ -198,6 +198,8 @@ export const createSwatchesSlice = (
         startPoint,
         startPointHandle,
         stepCount,
+        curveStyle,
+        hexColor,
       } = swatch;
       set({
         endPoint,
@@ -206,6 +208,8 @@ export const createSwatchesSlice = (
         startPoint,
         startPointHandle,
         stepCount,
+        hexColor,
+        curveStyle,
         swatchEditingId: id,
       });
     }

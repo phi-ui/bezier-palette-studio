@@ -23,7 +23,10 @@ export type CoordinatesState = {
   midPoint?: Point;
 };
 
-type Preset = Pick<InputsState, 'stepCount' | 'hue' | 'hexColor'> &
+type Preset = Pick<
+  InputsState,
+  'stepCount' | 'hue' | 'hexColor' | 'curveStyle'
+> &
   CoordinatesState & { id: string };
 export type Swatch = Preset & { name: string };
 type Presets = Preset[];

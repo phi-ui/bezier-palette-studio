@@ -3,7 +3,7 @@ import Button from '@components/ui/button';
 import PaintBucketIcon from '@components/Icons/PaintBucket';
 import useColorPicker from '@store/colorPicker';
 
-function GenerateSwatchButtons() {
+function GenerateSwatchButton() {
   const {
     endPoint,
     endPointHandle,
@@ -15,6 +15,7 @@ function GenerateSwatchButtons() {
     swatchEditingId,
     swatchName,
     midPoint,
+    curveStyle,
     createSwatch,
     updateSwatch,
     unloadSwatch,
@@ -31,6 +32,7 @@ function GenerateSwatchButtons() {
         stepCount: stepCountState,
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
+        curveStyle: curveStyleState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -47,6 +49,7 @@ function GenerateSwatchButtons() {
         stepCount: stepCountState,
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
+        curveStyle: curveStyleState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -67,6 +70,7 @@ function GenerateSwatchButtons() {
         id: swatchEditingId,
         midPoint,
         hexColor,
+        curveStyle,
       });
     } else {
       createSwatch({
@@ -79,6 +83,7 @@ function GenerateSwatchButtons() {
         name: swatchName,
         midPoint,
         hexColor,
+        curveStyle,
       });
     }
   };
@@ -100,4 +105,4 @@ function GenerateSwatchButtons() {
   );
 }
 
-export default GenerateSwatchButtons;
+export default GenerateSwatchButton;
