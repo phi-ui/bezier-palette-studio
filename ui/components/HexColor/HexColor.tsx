@@ -10,7 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@components/ui/tooltip';
-import { DEFAULT_HEX_COLOR } from '@store/constants';
 import { isHexValid } from '@utils/index';
 import useColorPicker from '@store/colorPicker';
 import InfoIcon from '@components/Icons/Info';
@@ -59,17 +58,16 @@ function HexColor() {
           disabled={!isPolyBezierCurve}
           onChange={handleHexColor}
         />
-        <TooltipProvider delayDuration={1}>
-          <Tooltip>
-            <TooltipTrigger>
-              <InfoIcon stroke="currentColor" />
-            </TooltipTrigger>
-            <TooltipContent>
-              If value is not valid default hex value &apos;{DEFAULT_HEX_COLOR}
-              &apos; will be utilized for the picker
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {!isHexValid(hexColor) && (
+          <TooltipProvider delayDuration={1}>
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon stroke="hsl(var(--destructive))" />
+              </TooltipTrigger>
+              <TooltipContent>Invalid hex value</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     </div>
   );
