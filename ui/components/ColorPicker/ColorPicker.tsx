@@ -6,6 +6,11 @@ import type { HueValue } from '@appTypes/color';
 import { Input } from '@components/ui/input';
 import BezierCurveGraph from '@components/BezierCurveGraph';
 import useColorPicker from '@store/colorPicker';
+import { getColorForCoordinates } from '@utils/index';
+import {
+  MAX_BOUNDARY,
+  MIN_BOUNDARY,
+} from '@components/BezierCurveGraph/constants';
 import styles from './colorPicker.module.css';
 
 const hueRangeClasses = clsx(
@@ -30,26 +35,35 @@ const blackOverlayClasses = clsx(
 
 function ColorPicker() {
   const colorPickerRef = useRef<HTMLDivElement>(null);
-  const { hue, updateHue } = useColorPicker(
+  const { hue, midPoint, updateHue } = useColorPicker(
     useShallow((state) => {
       const {
         hue: hueState,
+        midPoint: midPointState,
         updateHue: updateState,
-        curveType: curveTypeState,
-        curveSubType: curveSubTypeState,
       } = state;
       return {
         hue: hueState,
+        midPoint: midPointState,
         updateHue: updateState,
-        curveType: curveTypeState,
-        curveSubType: curveSubTypeState,
       };
     }),
   );
 
   const handleHueRangeSlider = (event: FormEvent<HTMLInputElement>) => {
     const { value = '0' } = event.currentTarget;
-    updateHue(parseInt(value, 10) as HueValue);
+    const newHue = parseInt(value, 10);
+    if (midPoint) {
+      const newHexColor = getColorForCoordinates(
+        newHue as HueValue,
+        midPoint,
+        MIN_BOUNDARY,
+        MAX_BOUNDARY,
+      ) as string;
+      updateHue(newHue as HueValue, newHexColor);
+    } else {
+      updateHue(newHue as HueValue);
+    }
   };
 
   return (

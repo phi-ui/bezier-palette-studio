@@ -27,7 +27,6 @@ function Swatch({
   swatch,
   isEditing,
   curveStyle,
-  hexColor,
 }: SwatchProps) {
   const { id } = swatch;
 
@@ -36,7 +35,7 @@ function Swatch({
     isEditing ? 'border-primary-border' : '',
   );
 
-  const colors = getColorsFromCoordinates(swatch, curveStyle, hexColor);
+  const colors = getColorsFromCoordinates(swatch, curveStyle);
 
   const editColorSwatch: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();

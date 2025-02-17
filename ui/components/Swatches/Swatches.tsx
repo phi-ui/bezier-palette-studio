@@ -17,7 +17,6 @@ function Swatches() {
     swatches,
     swatchEditingId,
     curveStyle,
-    hexColor,
     deleteSwatch,
     loadSwatch,
     duplicateSwatch,
@@ -28,7 +27,6 @@ function Swatches() {
         swatches: swatchesState,
         swatchEditingId: swatchEditingIdState,
         curveStyle: curveStyleState,
-        hexColor: hexColorState,
         deleteSwatch: deleteSwatchState,
         duplicateSwatch: duplicateSwatchState,
         loadSwatch: loadSwatchState,
@@ -38,7 +36,6 @@ function Swatches() {
         swatches: swatchesState,
         swatchEditingId: swatchEditingIdState,
         curveStyle: curveStyleState,
-        hexColor: hexColorState,
         deleteSwatch: deleteSwatchState,
         duplicateSwatch: duplicateSwatchState,
         loadSwatch: loadSwatchState,
@@ -97,7 +94,6 @@ function Swatches() {
               key={swatch.id}
               swatch={swatch}
               isEditing={swatchEditingId === swatch.id}
-              hexColor={hexColor}
               curveStyle={curveStyle}
               duplicateSwatch={duplicateSwatch}
               deleteSwatch={deleteSwatch}

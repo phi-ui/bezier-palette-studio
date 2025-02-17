@@ -8,6 +8,7 @@ function GenerateSwatchButtons() {
     endPoint,
     endPointHandle,
     hue,
+    hexColor,
     startPoint,
     startPointHandle,
     stepCount,
@@ -23,6 +24,7 @@ function GenerateSwatchButtons() {
         endPoint: endPointState,
         endPointHandle: endPointHandleState,
         hue: hueState,
+        hexColor: hexColorState,
         startPoint: startPointState,
         midPoint: midPointState,
         startPointHandle: startPointHandleState,
@@ -38,6 +40,7 @@ function GenerateSwatchButtons() {
         endPoint: endPointState,
         endPointHandle: endPointHandleState,
         hue: hueState,
+        hexColor: hexColorState,
         midPoint: midPointState,
         startPoint: startPointState,
         startPointHandle: startPointHandleState,
@@ -63,6 +66,7 @@ function GenerateSwatchButtons() {
         name: swatchName,
         id: swatchEditingId,
         midPoint,
+        hexColor,
       });
     } else {
       createSwatch({
@@ -74,6 +78,7 @@ function GenerateSwatchButtons() {
         stepCount,
         name: swatchName,
         midPoint,
+        hexColor,
       });
     }
   };

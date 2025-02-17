@@ -33,7 +33,13 @@ export const createInputsSlice = (
   ...INPUT_DEFAULT_VALUES,
 
   // state update action
-  updateHue: (hue) => set({ hue }),
+  updateHue: (hue, newHexColor) => {
+    if (newHexColor) {
+      set({ hue, hexColor: newHexColor });
+    } else {
+      set({ hue });
+    }
+  },
 
   updateCurveType: (curveType) => set({ curveType }),
 
@@ -111,6 +117,7 @@ export const createPresetsSlice = (
         endPoint: preset.endPoint,
         startPointHandle: preset.startPoint,
         endPointHandle: preset.endPointHandle,
+        hexColor: preset.hexColor,
       });
     }
   },

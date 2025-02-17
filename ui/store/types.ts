@@ -23,7 +23,7 @@ export type CoordinatesState = {
   midPoint?: Point;
 };
 
-type Preset = Pick<InputsState, 'stepCount' | 'hue'> &
+type Preset = Pick<InputsState, 'stepCount' | 'hue' | 'hexColor'> &
   CoordinatesState & { id: string };
 export type Swatch = Preset & { name: string };
 type Presets = Preset[];
@@ -39,7 +39,10 @@ export type SwatchesState = {
 };
 
 export type InputsAction = {
-  updateHue: (hue: InputsState['hue']) => void;
+  updateHue: (
+    hue: InputsState['hue'],
+    newHexColor?: InputsState['hexColor'],
+  ) => void;
   updateStepCount: (hue: InputsState['stepCount']) => void;
   updateSwatchName: (hue: InputsState['swatchName']) => void;
   updateCurveType: (hue: InputsState['curveType']) => void;
