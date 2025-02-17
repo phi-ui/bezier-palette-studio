@@ -200,6 +200,11 @@ export const createSwatchesSlice = (
         stepCount,
         curveStyle,
         hexColor,
+        autoGenerateSwatchName,
+        curveSubType,
+        curveType,
+        swatchName,
+        midPoint,
       } = swatch;
       set({
         endPoint,
@@ -211,6 +216,11 @@ export const createSwatchesSlice = (
         hexColor,
         curveStyle,
         swatchEditingId: id,
+        autoGenerateSwatchName,
+        curveSubType,
+        curveType,
+        swatchName,
+        midPoint,
       });
     }
   },

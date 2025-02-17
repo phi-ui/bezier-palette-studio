@@ -17,6 +17,9 @@ function GenerateSwatchButton() {
     swatchName,
     midPoint,
     curveStyle,
+    curveType,
+    curveSubType,
+    autoGenerateSwatchName,
     createSwatch,
     updateSwatch,
     unloadSwatch,
@@ -34,6 +37,9 @@ function GenerateSwatchButton() {
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
         curveStyle: curveStyleState,
+        curveType: curveTypeState,
+        curveSubType: curveSubTypeState,
+        autoGenerateSwatchName: autoGenerateSwatchNameState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -51,6 +57,9 @@ function GenerateSwatchButton() {
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
         curveStyle: curveStyleState,
+        curveType: curveTypeState,
+        curveSubType: curveSubTypeState,
+        autoGenerateSwatchName: autoGenerateSwatchNameState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -78,6 +87,10 @@ function GenerateSwatchButton() {
         midPoint,
         hexColor,
         curveStyle,
+        curveType,
+        autoGenerateSwatchName,
+        swatchName,
+        curveSubType,
       });
     } else {
       createSwatch({
@@ -91,6 +104,10 @@ function GenerateSwatchButton() {
         midPoint,
         hexColor,
         curveStyle,
+        curveType,
+        autoGenerateSwatchName,
+        swatchName,
+        curveSubType,
       });
     }
   };
