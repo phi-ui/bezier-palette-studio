@@ -32,8 +32,8 @@ function CurveStyle() {
   const curveStylesOptions = Object.values(curveStyles);
 
   return (
-    <div className="flex justify-end gap-2">
-      <SelectGroup>
+    <div className="flex justify-end gap-2 w-40">
+      <SelectGroup className='w-full'>
         <Label className="px-0 py-1.5 h-[1.5rem] inline-block">
           Curve Style
         </Label>
