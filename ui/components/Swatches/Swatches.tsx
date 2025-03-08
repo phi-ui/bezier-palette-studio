@@ -77,7 +77,7 @@ function Swatches() {
       },
       '*',
     );
-  }, []);
+  }, [swatches]);
 
   const loadStyles = () => {
     if (swatchData) {
