@@ -25,7 +25,7 @@ import {
 const getPluginData = (key: string) => {
   const retrievedData = figma.root.getPluginData(key);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-  return JSON.parse(retrievedData);
+  return JSON.parse(retrievedData || '{}');
 };
 
 const setPluginData = (key: string, data: unknown) => {
