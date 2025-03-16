@@ -57,6 +57,10 @@ export const createInputsSlice = (
     set({ curveStyle, hexColor: DEFAULT_HEX_COLOR, ...coords });
   },
 
+  updateIsConventional: (isConventional) => {
+    set({ isConventional });
+  },
+
   updateHexColor: (hexColor, isColorValid) => {
     const colorPickerPadding =
       (COLOR_PICKER_CONTAINER_SIZE - COLOR_PICKER_SIZE) / 2;

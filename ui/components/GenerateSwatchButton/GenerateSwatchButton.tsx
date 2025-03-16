@@ -20,6 +20,7 @@ function GenerateSwatchButton() {
     curveType,
     curveSubType,
     autoGenerateSwatchName,
+    isConventional,
     createSwatch,
     updateSwatch,
     unloadSwatch,
@@ -40,6 +41,7 @@ function GenerateSwatchButton() {
         curveType: curveTypeState,
         curveSubType: curveSubTypeState,
         autoGenerateSwatchName: autoGenerateSwatchNameState,
+        isConventional: isConventionalState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -60,6 +62,7 @@ function GenerateSwatchButton() {
         curveType: curveTypeState,
         curveSubType: curveSubTypeState,
         autoGenerateSwatchName: autoGenerateSwatchNameState,
+        isConventional: isConventionalState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -91,6 +94,7 @@ function GenerateSwatchButton() {
         autoGenerateSwatchName,
         swatchName,
         curveSubType,
+        isConventional,
       });
     } else {
       createSwatch({
@@ -108,6 +112,7 @@ function GenerateSwatchButton() {
         autoGenerateSwatchName,
         swatchName,
         curveSubType,
+        isConventional,
       });
     }
   };

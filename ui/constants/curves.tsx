@@ -40,16 +40,19 @@ export const curveStyles = {
     id: 'cubicBezier',
     label: 'Cubic Bezier',
     icon: <CurveIcon stroke="currentColor" />,
+    enableConventional: true,
   },
   polyBezier: {
     id: 'polyBezier',
     label: 'Poly Bezier',
     icon: <Curve2Icon stroke="currentColor" />,
+    enableConventional: true,
   },
   presets: {
     id: 'presets',
     label: 'Presets',
     icon: <CurveIcon stroke="currentColor" />,
+    enableConventional: false,
   },
 };
 
