@@ -1,79 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import type { EditableCoordsType, Point as PointType } from '@appTypes/coords';
-import type { CoordinatesAction } from '@store/types';
+import type { Point as PointType } from '@appTypes/coords';
 import { COLOR_PICKER_CONTAINER_SIZE } from '@constants/colors';
 import useColorPicker from '@store/colorPicker';
-import { MAX_BOUNDARY, MIN_BOUNDARY } from './constants';
-import Curve from './components/Curve';
-import Handle from './components/Handle';
-import Point from './components/Point';
-import CurvePoints from './components/CurvePoints';
+import CubicCurve from './components/CubicCurve';
+import QuadraticCurve from './components/QuadraticCurve';
 import styles from './bezierCurveGraph.module.css';
 
 function BezierCurveGraph() {
-  const {
-    hue,
-    freeHandMode,
-    startPoint,
-    updateStartPoint,
-    endPoint,
-    updateEndPoint,
-    startPointHandle,
-    updateStartPointHandle,
-    endPointHandle,
-    updateEndPointHandle,
-  } = useColorPicker(
+  const { curveStyle } = useColorPicker(
     useShallow((state) => {
-      const {
-        hue: hueState,
-        freeHandMode: freeHandModeState,
-        startPoint: startPointState,
-        updateStartPoint: updateStartPointState,
-        endPoint: endPointState,
-        updateEndPoint: updateEndPointState,
-        startPointHandle: startPointHandleState,
-        updateStartPointHandle: updateStartPointHandleState,
-        endPointHandle: endPointHandleState,
-        updateEndPointHandle: updateEndPointHandleState,
-      } = state;
+      const { curveStyle: curveStyleState } = state;
 
       return {
-        hue: hueState,
-        freeHandMode: freeHandModeState,
-        startPoint: startPointState,
-        updateStartPoint: updateStartPointState,
-        endPoint: endPointState,
-        updateEndPoint: updateEndPointState,
-        startPointHandle: startPointHandleState,
-        updateStartPointHandle: updateStartPointHandleState,
-        endPointHandle: endPointHandleState,
-        updateEndPointHandle: updateEndPointHandleState,
+        curveStyle: curveStyleState,
       };
     }),
   );
-
-  const updateCoords: Record<
-    EditableCoordsType,
-    CoordinatesAction[keyof CoordinatesAction]
-  > = useMemo(
-    () => ({
-      startPoint: updateStartPoint,
-      endPoint: updateEndPoint,
-      startPointHandle: updateStartPointHandle,
-      endPointHandle: updateEndPointHandle,
-    }),
-    [
-      updateEndPoint,
-      updateEndPointHandle,
-      updateStartPoint,
-      updateStartPointHandle,
-    ],
-  );
-
-  const handlePointCoords = (coords: PointType, type: EditableCoordsType) => {
-    updateCoords[type](coords);
-  };
 
   const containerRef = useRef<SVGSVGElement>(null);
   const [elementPosition, setElementPosition] = useState<PointType | undefined>(
@@ -110,70 +53,17 @@ function BezierCurveGraph() {
       width={COLOR_PICKER_CONTAINER_SIZE}
       height={COLOR_PICKER_CONTAINER_SIZE}
     >
-      <Handle
-        x={startPointHandle.x}
-        y={startPointHandle.y}
-        pointCoords={{
-          x: startPoint.x,
-          y: startPoint.y,
-        }}
-      />
-
-      <Handle
-        x={endPointHandle.x}
-        y={endPointHandle.y}
-        pointCoords={{
-          x: endPoint.x,
-          y: endPoint.y,
-        }}
-      />
-      <Curve
-        startPoint={startPoint}
-        endPoint={endPoint}
-        startPointHandle={startPointHandle}
-        endPointHandle={endPointHandle}
-      />
-      <CurvePoints />
-      <Point
-        x={startPointHandle.x}
-        y={startPointHandle.y}
-        disabled={!freeHandMode}
-        type="startPointHandle"
-        parentCoords={elementPosition}
-        handlePointCoords={handlePointCoords}
-        maxBoundary={elementDimensions?.max}
-        minBoundary={elementDimensions?.min}
-      />
-      <Point
-        x={endPointHandle.x}
-        y={endPointHandle.y}
-        disabled={!freeHandMode}
-        type="endPointHandle"
-        parentCoords={elementPosition}
-        handlePointCoords={handlePointCoords}
-        maxBoundary={elementDimensions?.max}
-        minBoundary={elementDimensions?.min}
-      />
-      <Point
-        hue={hue}
-        x={startPoint.x}
-        y={startPoint.y}
-        type="startPoint"
-        maxBoundary={MAX_BOUNDARY}
-        minBoundary={MIN_BOUNDARY}
-        parentCoords={elementPosition}
-        handlePointCoords={handlePointCoords}
-      />
-      <Point
-        hue={hue}
-        x={endPoint.x}
-        y={endPoint.y}
-        type="endPoint"
-        maxBoundary={MAX_BOUNDARY}
-        minBoundary={MIN_BOUNDARY}
-        parentCoords={elementPosition}
-        handlePointCoords={handlePointCoords}
-      />
+      {curveStyle === 'polyBezier' ? (
+        <QuadraticCurve
+          elementPosition={elementPosition}
+          elementDimensions={elementDimensions}
+        />
+      ) : (
+        <CubicCurve
+          elementPosition={elementPosition}
+          elementDimensions={elementDimensions}
+        />
+      )}
     </svg>
   );
 }

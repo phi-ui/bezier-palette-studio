@@ -21,8 +21,9 @@ import type { TokensInfoModalProps } from './type';
 function TokensInfoModal({
   atLeastOneSwatchCreated,
   swatches,
+  curveStyle,
 }: TokensInfoModalProps) {
-  const swatchData = JSON.stringify(getTokensData(swatches));
+  const swatchData = JSON.stringify(getTokensData(swatches, curveStyle));
 
   return (
     <Dialog>

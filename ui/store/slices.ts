@@ -1,5 +1,11 @@
 import { doesNameExistInArray, getNameFromHue, uuid } from '@utils';
 import cloneDeep from 'lodash/cloneDeep';
+import convertColor from 'color-convert';
+import type { HueValue } from '@appTypes/color';
+import {
+  COLOR_PICKER_CONTAINER_SIZE,
+  COLOR_PICKER_SIZE,
+} from '@constants/colors';
 import type {
   CoordinatesAction,
   CoordinatesState,
@@ -13,7 +19,12 @@ import type {
   SwatchesAction,
   SwatchesState,
 } from './types';
-import { COORDINATES_DEFAULT_VALUES, INPUT_DEFAULT_VALUES } from './constants';
+import {
+  CUBIC_BEZIER_DEFAULT_VALUES,
+  DEFAULT_HEX_COLOR,
+  INPUT_DEFAULT_VALUES,
+  POLY_BEZIER_DEFAULT_VALUES,
+} from './constants';
 
 export const createInputsSlice = (
   set: SetFunction,
@@ -22,7 +33,13 @@ export const createInputsSlice = (
   ...INPUT_DEFAULT_VALUES,
 
   // state update action
-  updateHue: (hue) => set({ hue }),
+  updateHue: (hue, newHexColor) => {
+    if (newHexColor) {
+      set({ hue, hexColor: newHexColor });
+    } else {
+      set({ hue });
+    }
+  },
 
   updateCurveType: (curveType) => set({ curveType }),
 
@@ -32,7 +49,35 @@ export const createInputsSlice = (
 
   updateSwatchName: (swatchName) => set({ swatchName }),
 
-  updateFreeHandMode: (freeHandMode) => set({ freeHandMode }),
+  updateCurveStyle: (curveStyle) => {
+    const coords =
+      curveStyle === 'polyBezier'
+        ? POLY_BEZIER_DEFAULT_VALUES
+        : CUBIC_BEZIER_DEFAULT_VALUES;
+    set({ curveStyle, hexColor: DEFAULT_HEX_COLOR, ...coords });
+  },
+
+  updateHexColor: (hexColor, isColorValid) => {
+    const colorPickerPadding =
+      (COLOR_PICKER_CONTAINER_SIZE - COLOR_PICKER_SIZE) / 2;
+    const [hue, saturation, value] = convertColor.hex.hsv(hexColor);
+    const x = (saturation * COLOR_PICKER_SIZE) / 100;
+    const y = ((100 - value) * COLOR_PICKER_SIZE) / 100;
+
+    if (isColorValid) {
+      // set midpoint coordinate and hue if user explicitly sets hex value
+      set({
+        hexColor,
+        hue: hue as HueValue,
+        midPoint: { x: x + colorPickerPadding, y: y + colorPickerPadding },
+      });
+    } else {
+      // if not valid or the hex value being set programmatically directly update the value
+      set({
+        hexColor,
+      });
+    }
+  },
 
   updateAutoGenerateSwatchName: (autoGenerateSwatchName) =>
     set({ autoGenerateSwatchName }),
@@ -42,12 +87,14 @@ export const createCoordinatesSlice = (
   set: SetFunction,
 ): CoordinatesState & CoordinatesAction => ({
   // initial state values
-  ...COORDINATES_DEFAULT_VALUES,
+  ...CUBIC_BEZIER_DEFAULT_VALUES,
 
   // state update action
   updateStartPoint: (startPoint) => set({ startPoint }),
 
   updateEndPoint: (endPoint) => set({ endPoint }),
+
+  updateMidPoint: (midPoint) => set({ midPoint }),
 
   updateStartPointHandle: (startPointHandle) => set({ startPointHandle }),
 
@@ -66,9 +113,11 @@ export const createPresetsSlice = (
         hue: preset.hue,
         stepCount: preset.stepCount,
         startPoint: preset.startPoint,
+        midPoint: preset.midPoint,
         endPoint: preset.endPoint,
         startPointHandle: preset.startPoint,
         endPointHandle: preset.endPointHandle,
+        hexColor: preset.hexColor,
       });
     }
   },
@@ -115,15 +164,15 @@ export const createSwatchesSlice = (
   },
 
   deleteSwatch: (id) => {
-    const { swatches } = get();
+    const { swatches, hue } = get();
     const swatchesCopy = cloneDeep(swatches);
     const index = swatchesCopy.findIndex((swatch) => swatch.id === id);
     swatchesCopy.splice(index, 1);
 
     const { endPoint, endPointHandle, startPoint, startPointHandle } =
-      COORDINATES_DEFAULT_VALUES;
+      CUBIC_BEZIER_DEFAULT_VALUES;
     const swatchName = getNameFromHue(
-      INPUT_DEFAULT_VALUES.hue,
+      hue,
       startPoint,
       endPoint,
       startPointHandle,
@@ -132,8 +181,6 @@ export const createSwatchesSlice = (
     const swatchNames = swatches.map((swatch) => swatch.name);
     const newName = doesNameExistInArray(swatchNames, swatchName);
     set({
-      ...COORDINATES_DEFAULT_VALUES,
-      ...INPUT_DEFAULT_VALUES,
       swatchName: newName,
       swatches: swatchesCopy,
       swatchEditingId: null,
@@ -151,6 +198,13 @@ export const createSwatchesSlice = (
         startPoint,
         startPointHandle,
         stepCount,
+        curveStyle,
+        hexColor,
+        autoGenerateSwatchName,
+        curveSubType,
+        curveType,
+        swatchName,
+        midPoint,
       } = swatch;
       set({
         endPoint,
@@ -159,7 +213,14 @@ export const createSwatchesSlice = (
         startPoint,
         startPointHandle,
         stepCount,
+        hexColor,
+        curveStyle,
         swatchEditingId: id,
+        autoGenerateSwatchName,
+        curveSubType,
+        curveType,
+        swatchName,
+        midPoint,
       });
     }
   },

@@ -6,6 +6,7 @@ export type Point = {
 export type CoordType =
   | 'startPoint'
   | 'endPoint'
+  | 'midPoint'
   | 'startPointHandle'
   | 'endPointHandle'
   | 'colorPoint';

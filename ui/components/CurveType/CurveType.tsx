@@ -15,7 +15,7 @@ import { getRelativePositionForHandles } from './utils';
 
 function CurveType() {
   const {
-    freeHandMode,
+    curveStyle,
     curveType,
     updateCurveType,
     curveSubType,
@@ -27,7 +27,7 @@ function CurveType() {
   } = useColorPicker(
     useShallow((state) => {
       const {
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         curveType: curveTypeState,
         updateCurveType: updateCurveTypeState,
         curveSubType: curveSubTypeState,
@@ -38,7 +38,7 @@ function CurveType() {
         updateEndPointHandle: updateEndPointHandleState,
       } = state;
       return {
-        freeHandMode: freeHandModeState,
+        curveStyle: curveStyleState,
         curveType: curveTypeState,
         updateCurveType: updateCurveTypeState,
         curveSubType: curveSubTypeState,
@@ -55,7 +55,7 @@ function CurveType() {
 
   useEffect(() => {
     if (
-      !freeHandMode &&
+      curveStyle === 'presets' &&
       curveType &&
       ((curvesTypes[curveType].subTypes && curveSubType) ||
         !curvesTypes[curveType].subTypes)
@@ -84,7 +84,7 @@ function CurveType() {
     startPoint,
     endPoint,
     updateEndPointHandle,
-    freeHandMode,
+    curveStyle,
   ]);
 
   useEffect(() => {
@@ -97,11 +97,13 @@ function CurveType() {
     <>
       <div className="w-40 flex flex-col gap-2">
         <SelectGroup>
-          <SelectLabel className="px-0">Curve</SelectLabel>
+          <SelectLabel className="px-0 py-1.5 h-[1.5rem] inline-block">
+            Curve Type
+          </SelectLabel>
           <Select
             onValueChange={updateCurveType}
             value={curveType}
-            disabled={freeHandMode}
+            disabled={curveStyle !== 'presets'}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Curve" />
@@ -116,14 +118,16 @@ function CurveType() {
           </Select>
         </SelectGroup>
       </div>
-      <div className="w-56 flex flex-col gap-2">
+      <div className="w-54 flex flex-1 flex-col gap-2">
         <SelectGroup>
-          <SelectLabel className="px-0">Curve Transition</SelectLabel>
+          <SelectLabel className="px-0 py-1.5 h-[1.5rem] inline-block">
+            Curve Transition
+          </SelectLabel>
           <Select
             onValueChange={updateCurveSubType}
             value={curveSubType}
             disabled={
-              freeHandMode ||
+              curveStyle !== 'presets' ||
               !curveType ||
               !!(curveType && !curvesTypes[curveType].subTypes)
             }

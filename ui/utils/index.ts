@@ -7,12 +7,14 @@ import { twMerge } from 'tailwind-merge';
 import convertColor from 'color-convert';
 import type { HueValue, SwatchData } from '@appTypes/color';
 import type { Point } from '@appTypes/coords';
-import type { Swatch, Swatches } from '@store/types';
+import type { CurveStyle, Swatch, Swatches } from '@store/types';
 import { COLOR_PICKER_CONTAINER_SIZE, COLOR_RANGES } from '@constants/colors';
 import {
   MAX_BOUNDARY,
   MIN_BOUNDARY,
 } from '@components/BezierCurveGraph/constants';
+
+const HEX_REGEX = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
 
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
@@ -48,13 +50,17 @@ export function getColorForCoordinates(
   return [hue, saturation, value];
 }
 
-export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
+export const getColorsFromCoordinates = (
+  swatch: Swatch,
+  curveStyle: CurveStyle,
+): string[] => {
   const {
     hue,
     startPoint,
     endPoint,
     startPointHandle,
     endPointHandle,
+    midPoint,
     stepCount,
   } = swatch;
 
@@ -62,11 +68,27 @@ export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
   const { x: x2, y: y2 } = endPoint;
   const { x: cx1, y: cy1 } = startPointHandle;
   const { x: cx2, y: cy2 } = endPointHandle;
+  let colorsCords: Point[] = [];
 
-  const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
-  const colorsCords = curve.getLUT(stepCount - 1);
-
-  return colorsCords.map((colorCord) => {
+  let midPointIndex: number | undefined;
+  if (curveStyle === 'polyBezier' && midPoint) {
+    const { x: mx, y: my } = midPoint;
+    const dividedSteps = Math.ceil(stepCount / 2);
+    const curve1 = new Bezier(x1, y1, cx1, cy1, mx, my);
+    const curve2 = new Bezier(mx, my, cx2, cy2, x2, y2);
+    const colorsCords1 = curve1.getLUT(
+      stepCount % 2 === 0 ? dividedSteps : dividedSteps - 1,
+    );
+    const colorsCords2 = curve2.getLUT(dividedSteps - 1);
+    // remove midpoint from the array
+    colorsCords2.shift();
+    colorsCords = [...colorsCords1, ...colorsCords2];
+    midPointIndex = colorsCords1.length - 1;
+  } else {
+    const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+    colorsCords = curve.getLUT(stepCount - 1);
+  }
+  const colors = colorsCords.map((colorCord) => {
     const { x, y } = colorCord;
     return getColorForCoordinates(
       hue,
@@ -75,13 +97,22 @@ export const getColorsFromCoordinates = (swatch: Swatch): string[] => {
       MAX_BOUNDARY,
     ) as string;
   });
+
+  // replace mid color with actual hex color provided by user to avoid approximation error
+  if (midPointIndex && swatch.hexColor !== '-')
+    colors[midPointIndex] = swatch.hexColor;
+
+  return colors;
 };
 
-export const getSwatchData = (swatches: Swatches): SwatchData[] =>
+export const getSwatchData = (
+  swatches: Swatches,
+  curveStyle: CurveStyle,
+): SwatchData[] =>
   swatches.map((swatch) => {
     const { name, id } = swatch;
     const swatchName = camelCase(name);
-    const colors = getColorsFromCoordinates(swatch);
+    const colors = getColorsFromCoordinates(swatch, curveStyle);
     return {
       id,
       name,
@@ -109,14 +140,14 @@ export const getSwatchData = (swatches: Swatches): SwatchData[] =>
     };
   });
 
-export const getTokensData = (swatches: Swatches) => {
+export const getTokensData = (swatches: Swatches, curveStyle: CurveStyle) => {
   const swatchData: Record<string, Record<string, string>> = {};
 
   for (const swatch of swatches) {
     const { name } = swatch;
     const swatchName = camelCase(name);
 
-    const colors = getColorsFromCoordinates(swatch);
+    const colors = getColorsFromCoordinates(swatch, curveStyle);
     swatchData[swatchName] = colors.reduce(
       (acc, color, index) => {
         acc[(index + 1) * 100] = color;
@@ -206,3 +237,5 @@ export const doesNameExistInArray = (
   }
   return nameToFind;
 };
+
+export const isHexValid = (color: string) => HEX_REGEX.test(color);

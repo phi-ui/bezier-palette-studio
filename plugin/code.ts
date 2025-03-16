@@ -25,7 +25,7 @@ import {
 const getPluginData = (key: string) => {
   const retrievedData = figma.root.getPluginData(key);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-  return JSON.parse(retrievedData);
+  return JSON.parse(retrievedData || '{}');
 };
 
 const setPluginData = (key: string, data: unknown) => {
@@ -128,7 +128,7 @@ const importPalette = () => {
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__, {
-  height: 768,
+  height: 778,
   width: 991,
   themeColors: true,
 });

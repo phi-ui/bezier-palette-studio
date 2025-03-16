@@ -20,12 +20,12 @@ function DarkModeToggle() {
             <ToggleGroup
               type="single"
               variant="outline"
-              defaultValue="freeHandMode"
+              defaultValue="darkMode"
               onClick={handleTheme}
             >
               <ToggleGroupItem
                 className="toggle-group-item"
-                value="freeHandMode"
+                value="darkMode"
                 aria-label="Dark Mode"
               >
                 <DarkMode fill="currentColor" />

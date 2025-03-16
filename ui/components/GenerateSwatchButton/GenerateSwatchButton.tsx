@@ -1,18 +1,25 @@
 import { useShallow } from 'zustand/react/shallow';
+import { isHexValid } from '@utils/index';
 import Button from '@components/ui/button';
 import PaintBucketIcon from '@components/Icons/PaintBucket';
 import useColorPicker from '@store/colorPicker';
 
-function GenerateSwatchButtons() {
+function GenerateSwatchButton() {
   const {
     endPoint,
     endPointHandle,
     hue,
+    hexColor,
     startPoint,
     startPointHandle,
     stepCount,
     swatchEditingId,
     swatchName,
+    midPoint,
+    curveStyle,
+    curveType,
+    curveSubType,
+    autoGenerateSwatchName,
     createSwatch,
     updateSwatch,
     unloadSwatch,
@@ -22,11 +29,17 @@ function GenerateSwatchButtons() {
         endPoint: endPointState,
         endPointHandle: endPointHandleState,
         hue: hueState,
+        hexColor: hexColorState,
         startPoint: startPointState,
+        midPoint: midPointState,
         startPointHandle: startPointHandleState,
         stepCount: stepCountState,
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
+        curveStyle: curveStyleState,
+        curveType: curveTypeState,
+        curveSubType: curveSubTypeState,
+        autoGenerateSwatchName: autoGenerateSwatchNameState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
@@ -36,17 +49,29 @@ function GenerateSwatchButtons() {
         endPoint: endPointState,
         endPointHandle: endPointHandleState,
         hue: hueState,
+        hexColor: hexColorState,
+        midPoint: midPointState,
         startPoint: startPointState,
         startPointHandle: startPointHandleState,
         stepCount: stepCountState,
         swatchEditingId: swatchEditingIdState,
         swatchName: swatchNameState,
+        curveStyle: curveStyleState,
+        curveType: curveTypeState,
+        curveSubType: curveSubTypeState,
+        autoGenerateSwatchName: autoGenerateSwatchNameState,
         createSwatch: createSwatchState,
         updateSwatch: updateSwatchState,
         unloadSwatch: unloadSwatchState,
       };
     }),
   );
+
+  const areInputsValid = () => {
+    if (curveStyle === 'polyBezier') return isHexValid(hexColor);
+
+    return true;
+  };
 
   const handleOnGenerateClick = () => {
     if (swatchEditingId) {
@@ -59,6 +84,13 @@ function GenerateSwatchButtons() {
         stepCount,
         name: swatchName,
         id: swatchEditingId,
+        midPoint,
+        hexColor,
+        curveStyle,
+        curveType,
+        autoGenerateSwatchName,
+        swatchName,
+        curveSubType,
       });
     } else {
       createSwatch({
@@ -69,6 +101,13 @@ function GenerateSwatchButtons() {
         startPointHandle,
         stepCount,
         name: swatchName,
+        midPoint,
+        hexColor,
+        curveStyle,
+        curveType,
+        autoGenerateSwatchName,
+        swatchName,
+        curveSubType,
       });
     }
   };
@@ -82,7 +121,11 @@ function GenerateSwatchButtons() {
           Unload Swatch
         </Button>
       ) : null}
-      <Button className="flex gap-2" onClick={handleOnGenerateClick}>
+      <Button
+        className="flex gap-2"
+        onClick={handleOnGenerateClick}
+        disabled={!areInputsValid()}
+      >
         <PaintBucketIcon width={20} height={20} fill="white" />
         {buttonText}
       </Button>
@@ -90,4 +133,4 @@ function GenerateSwatchButtons() {
   );
 }
 
-export default GenerateSwatchButtons;
+export default GenerateSwatchButton;

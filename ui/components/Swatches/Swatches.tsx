@@ -16,6 +16,7 @@ function Swatches() {
   const {
     swatches,
     swatchEditingId,
+    curveStyle,
     deleteSwatch,
     loadSwatch,
     duplicateSwatch,
@@ -25,6 +26,7 @@ function Swatches() {
       const {
         swatches: swatchesState,
         swatchEditingId: swatchEditingIdState,
+        curveStyle: curveStyleState,
         deleteSwatch: deleteSwatchState,
         duplicateSwatch: duplicateSwatchState,
         loadSwatch: loadSwatchState,
@@ -33,6 +35,7 @@ function Swatches() {
       return {
         swatches: swatchesState,
         swatchEditingId: swatchEditingIdState,
+        curveStyle: curveStyleState,
         deleteSwatch: deleteSwatchState,
         duplicateSwatch: duplicateSwatchState,
         loadSwatch: loadSwatchState,
@@ -74,7 +77,7 @@ function Swatches() {
       },
       '*',
     );
-  }, []);
+  }, [swatches]);
 
   const loadStyles = () => {
     if (swatchData) {
@@ -91,6 +94,7 @@ function Swatches() {
               key={swatch.id}
               swatch={swatch}
               isEditing={swatchEditingId === swatch.id}
+              curveStyle={curveStyle}
               duplicateSwatch={duplicateSwatch}
               deleteSwatch={deleteSwatch}
               loadSwatch={loadSwatch}
