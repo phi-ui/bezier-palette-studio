@@ -148,17 +148,27 @@ export const isNeutralColor = (
   const { x: fcx1, y: fcy1 } = FIXED_CURVE.startPointHandle;
   const { x: fcx2, y: fcy2 } = FIXED_CURVE.endPointHandle;
 
+  /**
+   * pointsPositionCount[0] will count how many sampled points lie on the left
+   * side of the fixed curve.
+   * pointsPositionCount[1] will count how many sampled points lie on the right
+   * side of the fixed curve.
+   */
   const pointsPositionCount = [0, 0];
 
+  // create curves for both fixed and plotted curve using Bezier function
+  const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+  const fixedCurve = new Bezier(fx1, fy1, fcx1, fcy1, fcx2, fcy2, fx2, fy2);
+  // iterate through the samples with increment of 0.1
   for (let i = 0; i <= 1; i += 0.1) {
-    const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
-    const fixedCurve = new Bezier(fx1, fy1, fcx1, fcy1, fcx2, fcy2, fx2, fy2);
-
-    // check the midpoint of the curve where does it lie on fixed curve's left or right side
+    // get point on the curve based on sample i value
     const pointOnFixedCurve = fixedCurve.get(i);
+    // represents direction of the curve using the tangent of the point at i
     const tangentForPoint = fixedCurve.derivative(i);
 
+    // this gets the length (magnitude) of the tangent.
     const length = Math.hypot(tangentForPoint.x, tangentForPoint.y);
+    // dividing by the magnitude normalizes the tangent into a unit vector.
     if (length !== 0) {
       tangentForPoint.x /= length;
       tangentForPoint.y /= length;
@@ -168,7 +178,7 @@ export const isNeutralColor = (
     const leftNormal: Point = { x: tangentForPoint.y, y: -tangentForPoint.x };
 
     const pointOnCurve = curve.get(i);
-    // Create a vector from the fixed curve’s midpoint to the other curve’s midpoint.
+    // Create a vector from the fixed curve’s point to the other curve’s point.
     const diff: Point = {
       x: pointOnCurve.x - pointOnFixedCurve.x,
       y: pointOnCurve.y - pointOnFixedCurve.y,
@@ -179,9 +189,9 @@ export const isNeutralColor = (
       // point on left
       pointsPositionCount[0] += 1;
     } else {
+      // point on right
       pointsPositionCount[1] += 1;
     }
-    // point on right
   }
 
   if (pointsPositionCount[0] > pointsPositionCount[1]) {
