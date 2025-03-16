@@ -10,6 +10,7 @@ export type InputsState = {
   curveType: CurveType | '';
   curveSubType: CurveSubType | '';
   curveStyle: CurveStyle;
+  isConventional: boolean;
   hexColor: string;
   swatchName: string;
   autoGenerateSwatchName: boolean;
@@ -47,6 +48,7 @@ export type InputsAction = {
   updateCurveType: (hue: InputsState['curveType']) => void;
   updateCurveSubType: (hue: InputsState['curveSubType']) => void;
   updateCurveStyle: (curveStyle: InputsState['curveStyle']) => void;
+  updateIsConventional: (isConventional: InputsState['isConventional']) => void;
   updateHexColor: (
     hexColor: InputsState['hexColor'],
     isColorValid?: boolean,

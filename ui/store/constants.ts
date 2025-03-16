@@ -6,6 +6,7 @@ export const INPUT_DEFAULT_VALUES: InputsState = {
   curveSubType: '',
   swatchName: '',
   autoGenerateSwatchName: true,
+  isConventional: true,
   stepCount: 9,
   curveStyle: 'cubicBezier',
   hexColor: '-',
