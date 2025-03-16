@@ -1,7 +1,7 @@
-import type { Point } from '@appTypes/coords';
-import useColorPicker from '@store/colorPicker';
 import { Bezier } from 'bezier-js';
 import { useShallow } from 'zustand/react/shallow';
+import type { Point } from '@appTypes/coords';
+import useColorPicker from '@store/colorPicker';
 
 const useSwatches = () => {
   const {
