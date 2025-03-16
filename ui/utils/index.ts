@@ -8,8 +8,9 @@ import convertColor from 'color-convert';
 import type { HueValue, SwatchData } from '@appTypes/color';
 import type { Point } from '@appTypes/coords';
 import type { Swatch, Swatches } from '@store/types';
-import { COLOR_PICKER_CONTAINER_SIZE, COLOR_RANGES } from '@constants/colors';
+import { COLOR_RANGES } from '@constants/colors';
 import {
+  FIXED_CURVE,
   MAX_BOUNDARY,
   MIN_BOUNDARY,
 } from '@components/BezierCurveGraph/constants';
@@ -132,36 +133,68 @@ export const getTokensData = (swatches: Swatches) => {
 export const uuid = () => Date.now().toString(36);
 
 export const isNeutralColor = (
-  hue: HueValue,
   startPoint: Point,
   endPoint: Point,
   startPointHandle: Point,
   endPointHandle: Point,
 ) => {
-  const [, startPointSaturation] = getColorForCoordinates(
-    hue,
-    { x: startPoint.x, y: startPoint.y },
-    MIN_BOUNDARY,
-    MAX_BOUNDARY,
-    false,
-  ) as number[];
+  const { x: x1, y: y1 } = startPoint;
+  const { x: x2, y: y2 } = endPoint;
+  const { x: cx1, y: cy1 } = startPointHandle;
+  const { x: cx2, y: cy2 } = endPointHandle;
 
-  const [, endPointSaturation] = getColorForCoordinates(
-    hue,
-    { x: endPoint.x, y: endPoint.y },
-    MIN_BOUNDARY,
-    MAX_BOUNDARY,
-    false,
-  ) as number[];
+  const { x: fx1, y: fy1 } = FIXED_CURVE.startPoint;
+  const { x: fx2, y: fy2 } = FIXED_CURVE.endPoint;
+  const { x: fcx1, y: fcy1 } = FIXED_CURVE.startPointHandle;
+  const { x: fcx2, y: fcy2 } = FIXED_CURVE.endPointHandle;
 
-  if (
-    endPointSaturation <= 10 &&
-    startPointSaturation <= 10 &&
-    startPointHandle.x <= COLOR_PICKER_CONTAINER_SIZE / 2 &&
-    endPointHandle.x <= COLOR_PICKER_CONTAINER_SIZE / 2 &&
-    startPointHandle.y <= COLOR_PICKER_CONTAINER_SIZE / 2 &&
-    endPointHandle.y >= COLOR_PICKER_CONTAINER_SIZE / 2
-  ) {
+  /**
+   * pointsPositionCount[0] will count how many sampled points lie on the left
+   * side of the fixed curve.
+   * pointsPositionCount[1] will count how many sampled points lie on the right
+   * side of the fixed curve.
+   */
+  const pointsPositionCount = [0, 0];
+
+  // create curves for both fixed and plotted curve using Bezier function
+  const curve = new Bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+  const fixedCurve = new Bezier(fx1, fy1, fcx1, fcy1, fcx2, fcy2, fx2, fy2);
+  // iterate through the samples with increment of 0.1
+  for (let i = 0; i <= 1; i += 0.1) {
+    // get point on the curve based on sample i value
+    const pointOnFixedCurve = fixedCurve.get(i);
+    // represents direction of the curve using the tangent of the point at i
+    const tangentForPoint = fixedCurve.derivative(i);
+
+    // this gets the length (magnitude) of the tangent.
+    const length = Math.hypot(tangentForPoint.x, tangentForPoint.y);
+    // dividing by the magnitude normalizes the tangent into a unit vector.
+    if (length !== 0) {
+      tangentForPoint.x /= length;
+      tangentForPoint.y /= length;
+    }
+
+    // The left–normal (rotating the tangent 90° anti-clockwise)
+    const leftNormal: Point = { x: tangentForPoint.y, y: -tangentForPoint.x };
+
+    const pointOnCurve = curve.get(i);
+    // Create a vector from the fixed curve’s point to the other curve’s point.
+    const diff: Point = {
+      x: pointOnCurve.x - pointOnFixedCurve.x,
+      y: pointOnCurve.y - pointOnFixedCurve.y,
+    };
+
+    const dot = diff.x * leftNormal.x + diff.y * leftNormal.y;
+    if (dot <= 0) {
+      // point on left
+      pointsPositionCount[0] += 1;
+    } else {
+      // point on right
+      pointsPositionCount[1] += 1;
+    }
+  }
+
+  if (pointsPositionCount[0] > pointsPositionCount[1]) {
     return true;
   }
   return false;
@@ -178,9 +211,7 @@ export const getNameFromHue = (
     return 'Invalid hue value. Hue should be between 0 and 360.';
   }
 
-  if (
-    isNeutralColor(hue, startPoint, endPoint, startPointHandle, endPointHandle)
-  ) {
+  if (isNeutralColor(startPoint, endPoint, startPointHandle, endPointHandle)) {
     return 'Neutral';
   }
 
