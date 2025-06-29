@@ -114,6 +114,45 @@ const createPalette = (swatches: SwatchData[]) => {
   }
 };
 
+const createColorVariables = (swatches: SwatchData[]) => {
+  (async () => {
+    try {
+      const variableCollections =
+        await figma.variables.getLocalVariableCollectionsAsync();
+
+      const existingColorVariableCollection = variableCollections.find(
+        (collection) => collection.name === 'Colors',
+      );
+
+      if (existingColorVariableCollection) {
+        existingColorVariableCollection.remove();
+      }
+      const colorVariablesCollection =
+        figma.variables.createVariableCollection('Colors');
+
+      for (const swatch of swatches) {
+        for (const color of swatch.colors) {
+          const variableName = `${swatch.token}/${color.name}`;
+          const colorVariable = figma.variables.createVariable(
+            variableName,
+            colorVariablesCollection,
+            'COLOR',
+          );
+          colorVariable.setValueForMode(
+            colorVariablesCollection.modes[0].modeId,
+            figma.util.rgb(color.hex),
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Error while creating color variables:', error);
+      figma.notify('Error occurred while creating color variables!', {
+        error: true,
+      });
+    }
+  })();
+};
+
 const importPalette = () => {
   const { data, timestamp } = getPluginData('palette-data');
 
@@ -149,6 +188,10 @@ figma.ui.onmessage = (msg: {
     }
     case 'import-color-palette': {
       importPalette();
+      break;
+    }
+    case 'create-color-variables': {
+      createColorVariables(msg.colors);
       break;
     }
     default: {
