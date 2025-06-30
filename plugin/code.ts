@@ -144,6 +144,8 @@ const createColorVariables = (swatches: SwatchData[]) => {
           );
         }
       }
+
+      figma.notify('Color Variables Created! 🎉');
     } catch (error) {
       console.error('Error while creating color variables:', error);
       figma.notify('Error occurred while creating color variables!', {
