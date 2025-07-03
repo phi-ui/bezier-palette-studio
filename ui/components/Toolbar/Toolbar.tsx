@@ -11,6 +11,7 @@ import useColorPicker from '@store/colorPicker';
 import TokensInfoModal from '@components/TokensInfoModal';
 import ColorsIcon from '@components/Icons/Colors';
 import ExportIcon from '@components/Icons/Export';
+import VariableIcon from '@components/Icons/Variable';
 
 function Toolbar() {
   const { swatches, curveStyle } = useColorPicker(
@@ -46,6 +47,22 @@ function Toolbar() {
         swatches={swatches}
         curveStyle={curveStyle}
       />
+      <TooltipProvider delayDuration={1}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              className="flex gap-2"
+              variant="secondary"
+              disabled={!atLeastOneSwatchCreated}
+              onClick={() => handleColorOperation('create-color-variables')}
+            >
+              <VariableIcon width={16} height={16} fill="currentColor" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Create Color Variables</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <TooltipProvider delayDuration={1}>
         <Tooltip>
           <TooltipTrigger asChild>
